@@ -1,4 +1,7 @@
-<?php require_once('../../../private/initialize.php'); ?>
+<?php require_once('../../../private/initialize.php'); 
+
+require_login();
+?>
 
 <?php
 
@@ -38,19 +41,19 @@ $Home_set = find_all("home");
 
   	  <?php while($Home = mysqli_fetch_assoc($Home_set)) { ?>
         <tr>
-          <td><?php echo $Home['Home_id']; ?></td>
-          <td><?php echo $Home['Purchase_Date']; ?></td>
-          <td><?php echo $Home['Home_value']; ?></td>
-          <td><?php echo $Home['Area']; ?></td>
-          <td><?php echo $Home['Home_type']; ?></td>
+          <td><?php echo h($Home['Home_id']); ?></td>
+          <td><?php echo h($Home['Purchase_Date']); ?></td>
+          <td><?php echo h($Home['Home_value']); ?></td>
+          <td><?php echo h($Home['Area']); ?></td>
+          <td><?php echo h($Home['Home_type']); ?></td>
           <td><?php echo $Home['Auto_fire' ]== 1 ? 'Y' : 'N'; ?></td>
           <td><?php echo $Home['Home_sec'] == 1 ? 'Y' : 'N'; ?></td>
-          <td><?php echo $Home['Pool']; ?></td>
+          <td><?php echo h($Home['Pool']); ?></td>
           <td><?php echo $Home['Basement']== 1 ? 'Y' : 'N'; ?></td>
-          <td><?php echo $Home['Policy_no']; ?></td>
+          <td><?php echo h($Home['Policy_no']); ?></td>
           <td><a class="action" href="<?php echo url_for('/staff/home/show.php?id=' . h(u($Home['Home_id']))); ?>">View</a></td>
           <td><a class="action" href="<?php echo url_for('/staff/home/edit.php?id=' . h(u($Home['Home_id']))); ?>">Edit</a></td>
-          <td><a class="action" href="">Delete</a></td>
+          <td><a class="action" href="<?php echo url_for('/staff/home/delete.php?id=' . h(u($Home['Home_id']))); ?>">Delete</a></td>
     	  </tr>
       <?php } ?>
   	</table>

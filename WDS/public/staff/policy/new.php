@@ -2,27 +2,41 @@
 
 require_once('../../../private/initialize.php');
 
-$Policy_no = '';
-$P_Type = '';
-$Cid = '';
-$Start_Date = '';
-$End_Date = '';
-$Premium = '';
-$Status = '';
+require_login();
 
-if(is_post_request()) {
+if(is_post_request()){
 
-  // Handle form values sent by new.php
+  $policy = [];
+  $policy['Policy_no'] = $_POST['Policy_no'] ?? '';
+  $policy['P_Type'] = $_POST['P_Type'] ?? '';
+  $policy['Cid'] = $_POST['Cid'] ?? '';
+  $policy['Start_Date'] = $_POST['Start_Date'] ?? '';
+  $policy['End_Date'] = $_POST['End_Date'] ?? '';
+  $policy['Premium'] = $_POST['Premium'] ?? '';
+  $policy['Status'] = $_POST['Status'] ?? '';
 
-  $Policy_no = $_POST['Policy_no'] ?? '';
-  $P_Type = $_POST['P_Type'] ?? '';
-  $Cid = $_POST['Cid'] ?? '';
-  $Start_Date = $_POST['Start_Date'] ?? '';
-  $End_Date = $_POST['End_Date'] ?? '';
-  $Premium = $_POST['Premium'] ?? '';
-  $Status = $_POST['Status'] ?? '';
+  $result = insert_policy($policy);
+  //for insert statement the result is True or False
 
+  if($result===true){
+    $new_id = mysqli_insert_id($db);
+    $_SESSION['message'] = 'New Policy Added!';
+    redirect_to(url_for('/staff/policy/show.php?id=' . h(u($policy['Policy_no']))));
+
+  } else {
+    $errors = $result;
+  }
 }
+else{
+$policy['Policy_no'] = '';
+$policy['P_Type'] = '';
+$policy['Cid'] = '';
+$policy['Start_Date'] = '';
+$policy['End_Date'] = '';
+$policy['Premium'] = '';
+$policy['Status'] = '';
+
+  }
 
 ?>
 <?php $page_title = 'Create Policy'; ?>
@@ -34,47 +48,47 @@ if(is_post_request()) {
 
   <div class="policy new">
     <h1>Create Policy</h1>
-
-    <form action="<?php echo url_for('/staff/policy/create.php'); ?>" method="post">
+    <?php echo display_errors($errors); ?>
+    <form action="<?php echo url_for('/staff/policy/new.php'); ?>" method="post">
       <dl>
         <dt>Policy Number</dt>
         <dd><input type="number" name="Policy_no" min="100000000000" max="999999999999"
-        value="<?php echo h($Policy_no); ?>" /></dd>
+        value="<?php echo h($policy['Policy_no']); ?>" /></dd>
       </dl>
       
       <dl>
         <dt>Policy Type</dt>
-        <dd><input type="radio" id = "Auto" name="P_Type" value="A" <?php if($P_Type == "A") { echo "checked";} ?>
+        <dd><input type="radio" id = "Auto" name="P_Type" value="A" <?php if($policy['P_Type'] == "A") { echo "checked";} ?>
         /><label for="Auto">Auto</label></dd>
-        <dd><input type="radio" id = "Home" name="P_Type" value="H" <?php if($P_Type == "H") { echo "checked";} ?>
+        <dd><input type="radio" id = "Home" name="P_Type" value="H" <?php if($policy['P_Type'] == "H") { echo "checked";} ?>
         /><label for="Home">Home</label></dd>
       </dl>
       
       <dl>
         <dt>Customer ID</dt>
-        <dd><input type="number" name="Cid" min="100000" max="999999" value="<?php echo h($Cid); ?>" /></dd>
+        <dd><input type="number" name="Cid" min="100000" max="999999" value="<?php echo h($policy['Cid']); ?>" /></dd>
       </dl>
       <dl>
         <dt>Start Date</dt>
-        <dd><input type="date" name="Start_Date" value="<?php echo h($Start_Date); ?>" /></dd>
+        <dd><input type="date" name="Start_Date" value="<?php echo h($policy['Start_Date']); ?>" /></dd>
       </dl>
 
       <dl>
         <dt>End Date</dt>
-        <dd><input type="date" name="End_Date" value="<?php echo h($End_Date); ?>" /></dd>
+        <dd><input type="date" name="End_Date" value="<?php echo h($policy['End_Date']); ?>" /></dd>
       </dl>
       
       <dl>
         <dt>Premium</dt>
-        <dd><input type="number" name="Premium" value="<?php echo h($Premium); ?>" /></dd>
+        <dd><input type="number" name="Premium" value="<?php echo h($policy['Premium']); ?>" /></dd>
       </dl>
 
       <dl>
         <dt>Status</dt>
-        <dd><input type="radio" id = "Current" name="Status" value="C" <?php if($Status == "C") { echo "checked";} ?>
-        /><label for="Auto">Current</label></dd>
-        <dd><input type="radio" id = "Expired" name="Status" value="P" <?php if($Status == "P") { echo "checked";} ?>
-        /><label for="Home">Expired</label></dd>        
+        <dd><input type="radio" id = "Current" name="Status" value="C" <?php if($policy['Status'] == "C") { echo "checked";} ?>
+        /><label for="Current">Current</label></dd>
+        <dd><input type="radio" id = "Expired" name="Status" value="P" <?php if($policy['Status'] == "P") { echo "checked";} ?>
+        /><label for="Expired">Expired</label></dd>        
       </dl>
   
       <div id="operations">

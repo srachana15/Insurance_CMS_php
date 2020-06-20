@@ -1,5 +1,6 @@
     
     <footer>
+    	
         &copy; <?php echo date('Y'); ?> We Do Secure
     </footer>
     

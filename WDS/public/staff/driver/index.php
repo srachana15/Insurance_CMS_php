@@ -1,4 +1,7 @@
-<?php require_once('../../../private/initialize.php'); ?>
+<?php require_once('../../../private/initialize.php'); 
+
+require_login();
+?>
 
 
 <?php
@@ -37,13 +40,13 @@
 
   	  <?php while($Driver = mysqli_fetch_assoc($Driver_set)) { ?>
         <tr>
-          <td><?php echo $Driver['License_no']; ?></td>
-          <td><?php echo $Driver['D_Fname']; ?></td>
-          <td><?php echo $Driver['D_Lname']; ?></td>
-          <td><?php echo $Driver['D_DOB']; ?></td>
+          <td><?php echo h($Driver['License_no']); ?></td>
+          <td><?php echo h($Driver['D_Fname']); ?></td>
+          <td><?php echo h($Driver['D_Lname']); ?></td>
+          <td><?php echo h($Driver['D_DOB']); ?></td>
           <td><a class="action" href="<?php echo url_for('/staff/driver/show.php?id=' . h(u($Driver['License_no']))); ?>">View</a></td>
           <td><a class="action" href="<?php echo url_for('/staff/driver/edit.php?id=' . h(u($Driver['License_no']))); ?>">Edit</a></td>
-          <td><a class="action" href="">Delete</a></td>
+          <td><a class="action" href="<?php echo url_for('/staff/driver/delete.php?id=' . h(u($Driver['License_no']))); ?>">Delete</a></td>
     	  </tr>
       <?php } ?>
   	</table>

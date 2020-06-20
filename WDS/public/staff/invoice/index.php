@@ -1,4 +1,7 @@
-<?php require_once('../../../private/initialize.php'); ?>
+<?php require_once('../../../private/initialize.php'); 
+
+require_login();
+?>
 
 <?php
 
@@ -38,13 +41,13 @@ $Invoice_set = find_all("invoice");
 
   	  <?php while ($Invoice = mysqli_fetch_assoc($Invoice_set)) { ?>
         <tr>
-          <td><?php echo $Invoice['Invoice_id']; ?></td>
-          <td><?php echo $Invoice['Invoice_amt']; ?></td>
-          <td><?php echo $Invoice['Policy_no']; ?></td>
-          <td><?php echo $Invoice['Due_Date']; ?></td>
+          <td><?php echo h($Invoice['Invoice_id']); ?></td>
+          <td><?php echo h($Invoice['Invoice_amt']); ?></td>
+          <td><?php echo h($Invoice['Policy_no']); ?></td>
+          <td><?php echo h($Invoice['Due_Date']); ?></td>
           <td><a class="action" href="<?php echo url_for('/staff/invoice/show.php?id=' . h(u($Invoice['Invoice_id']))); ?>">View</a></td>
           <td><a class="action" href="<?php echo url_for('/staff/invoice/edit.php?id=' . h(u($Invoice['Invoice_id']))); ?>">Edit</a></td>
-          <td><a class="action" href="">Delete</a></td>
+          <td><a class="action" href="<?php echo url_for('/staff/invoice/delete.php?id=' . h(u($Invoice['Invoice_id']))); ?>">Delete</a></td>
     	  </tr>
       <?php } ?>
   	</table>

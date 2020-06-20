@@ -42,3 +42,5 @@ else{
 	redirect_to(url_for('/staff/policy/new.php'));
 	}
 
+	?>
+

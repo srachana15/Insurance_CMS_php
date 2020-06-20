@@ -1,5 +1,7 @@
 <?php
   ob_start();
+
+  session_start(); //Turn On Sessions
   // Assign file paths to PHP constants
   // __FILE__ returns the current path to this file
   // dirname() returns the path to the parent directory
@@ -23,7 +25,13 @@
   require_once('functions.php');
   require_once('database.php');
   require_once('query_function.php');
+  require_once('validation_functions.php');
+  require_once('auth_functions.php');
+  require_once('customer_auth_functions.php');
+
 
   $db = db_connect();
+  $errors = [];
+
   
 ?>

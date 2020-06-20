@@ -1,4 +1,5 @@
-<?php require_once('../../../private/initialize.php'); ?>
+<?php require_once('../../../private/initialize.php'); 
+require_login();?>
 
 
 <?php $Customer_set = find_all("customer"); ?>
@@ -36,20 +37,20 @@
 
   	  <?php while($Customer = mysqli_fetch_assoc($Customer_set)) { ?>
         <tr>
-          <td><?php echo $Customer['Cid']; ?></td>
-          <td><?php echo $Customer['Fname']; ?></td>
-          <td><?php echo $Customer['Lname']; ?></td>
-          <td><?php echo $Customer['St']; ?></td>
-          <td><?php echo $Customer['City']; ?></td>
-          <td><?php echo $Customer['State']; ?></td>
-          <td><?php echo $Customer['Zipcode']; ?></td>
-          <td><?php echo $Customer['Gender']; ?></td>
-          <td><?php echo $Customer['DOB']; ?></td>
-          <td><?php echo $Customer['M_Status']; ?></td>
-          <td><?php echo $Customer['C_Type']; ?></td>    	    
+          <td><?php echo h($Customer['Cid']); ?></td>
+          <td><?php echo h($Customer['Fname']); ?></td>
+          <td><?php echo h($Customer['Lname']); ?></td>
+          <td><?php echo h($Customer['St']); ?></td>
+          <td><?php echo h($Customer['City']); ?></td>
+          <td><?php echo h($Customer['State']); ?></td>
+          <td><?php echo h($Customer['Zipcode']); ?></td>
+          <td><?php echo h($Customer['Gender']); ?></td>
+          <td><?php echo h($Customer['DOB']); ?></td>
+          <td><?php echo h($Customer['M_Status']); ?></td>
+          <td><?php echo h($Customer['C_Type']); ?></td>    	    
           <td><a class="action" href="<?php echo url_for('/staff/customer/show.php?id=' . h(u($Customer['Cid']))); ?>">View</a></td>
           <td><a class="action" href="<?php echo url_for('/staff/customer/edit.php?id=' . h(u($Customer['Cid']))); ?>">Edit</a></td>
-          <td><a class="action" href="">Delete</a></td>
+          <td><a class="action" href="<?php echo url_for('/staff/customer/delete.php?id=' . h(u($Customer['Cid']))); ?>">Delete</a></td>
     	  </tr>
       <?php } ?>
   	</table>

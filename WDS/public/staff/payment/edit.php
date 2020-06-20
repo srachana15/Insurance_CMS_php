@@ -2,138 +2,93 @@
 
 require_once('../../../private/initialize.php');
 
-if(!isset($_GET['id'])) {
-  redirect_to(url_for('/staff/customer/index.php'));
-}
+require_login();
 
 $id =$_GET['id'];
-$Cid = '';
-$Fname = '';
-$Lname = '';
-$St = '';
-$City = '';
-$State = '';
-$Zipcode = '';
-$Gender = '';
-$DOB = '';
-$M_Status = '';
-$C_Type = '';
 
 if(is_post_request()) {
 
   // Handle form values sent by new.php
+  $payment=[];
+  $payment['Instal_ID'] = $_POST['Instal_ID'] ?? '';
+  $payment['Instal_amt'] = $_POST['Instal_amt'] ?? '';
+  $payment['Pay_date'] = $_POST['Pay_date'] ?? '';
+  $payment['Pay_method'] = $_POST['Pay_method'] ?? '';
+  $payment['Invoice_id'] = $_POST['Invoice_id'] ?? '';
 
-  $Cid = $_POST['Cid'] ?? '';
-  $Fname = $_POST['Fname'] ?? '';
-  $Lname = $_POST['Lname'] ?? '';
-  $St = $_POST['St'] ?? '';
-  $City = $_POST['City'] ?? '';
-  $State = $_POST['State'] ?? '';
-  $Zipcode = $_POST['Zipcode'] ?? '';
-  $Gender = $_POST['Gender'] ?? '';
-  $DOB = $_POST['DOB'] ?? '';
-  $M_Status = $_POST['M_Status'] ?? '';
-  $C_Type = $_POST['C_Type'] ?? '';
 
-  echo "Form parameters<br />";
-  echo "Cid: " . $Cid . "<br />";
-  echo "Fname: " . $Fname . "<br />";
-  echo "Lname: " . $Lname . "<br />";
-  echo "St: " . $St . "<br />";
-  echo "City: " . $City . "<br />";
-  echo "State: " . $State . "<br />";
-  echo "Zipcode: " . $Zipcode . "<br />";
-  echo "Gender: " . $Gender . "<br />";
-  echo "DOB: " . $DOB . "<br />";
-  echo "M_Status: " . $M_Status . "<br />";
-  echo "C_Type: " . $C_Type . "<br />";
+  $result = update_payment($payment);
+  //for insert statement the result is True or False
+
+  if($result===true){
+    $new_id = mysqli_insert_id($db);
+    $_SESSION['message'] = 'Payment Info Deleted!';
+    redirect_to(url_for('/staff/payment/show.php?id=' . h(u( $id))));
+
+  } else {
+    $errors = $result;
+  }
+
+}
+
+else{
+  $payment = find_record("payment", "Instal_ID" ,$id);
 }
 
 ?>
-<?php $page_title = 'Edit Customer'; ?>
+<?php $page_title = 'Create Payment'; ?>
 <?php include(SHARED_PATH . '/staff_header.php'); ?>
 
 <div id="content">
 
-  <a class="back-link" href="<?php echo url_for('/staff/customer/index.php'); ?>">&laquo; Back to List</a>
+  <a class="back-link" href="<?php echo url_for('/staff/payment/index.php'); ?>">&laquo; Back to List</a>
 
-  <div class="customer edit">
-    <h1>Edit Customer</h1>
-
-    <form action="<?php echo url_for('/staff/customer/edit.php?id=' . h(u($id))); ?>" method="post">
+  <div class="payment new">
+    <h1>Edit Payment</h1>
+    <?php echo display_errors($errors); ?>
+    <form action="<?php echo url_for('/staff/payment/edit.php?id=' . h(u($id))); ?>" method="post">
       <dl>
-        <dt>Cid</dt>
-        <dd><input type="number" name="Cid" min ="1" max = "999999" value="<?php echo h($Cid); ?>" /></dd>
+        <dt>Instal_ID</dt>
+        <dd><input type="number" name="Instal_ID" min ="10000000" max = "99999999" value="<?php echo h($payment['Instal_ID']); ?>" /></dd>
       </dl>
       
       <dl>
-        <dt>First Name</dt>
-        <dd><input type="text" name="Fname" value="<?php echo $Fname; ?>" /></dd>
+        <dt>Installment Amount</dt>
+        <dd><input type="number" name="Instal_amt" value="<?php echo h($payment['Instal_amt']); ?>" /></dd>
       </dl>
       
       <dl>
-        <dt>Last Name</dt>
-        <dd><input type="text" name="Lname" value="<?php echo h($Lname); ?>" /></dd>
-      </dl>
-      <dl>
-        <dt>Street Address</dt>
-        <dd><input type="text" name="St" value="<?php echo h($St); ?>" /></dd>
-      </dl>
-
-      <dl>
-        <dt>City</dt>
-        <dd><input type="text" name="City" value="<?php echo h($City); ?>" /></dd>
+        <dt>Payment Date</dt>
+        <dd><input type="date" name="Pay_date" value="<?php echo h($payment['Pay_date']); ?>" /></dd>
       </dl>
       
       <dl>
-        <dt>State </dt>
-        <dd><input type="text" name="State" value="<?php echo h($State); ?>" /></dd>
+        <dt>Pay_method</dt>
+        <dd><input type="radio" id = "Credit" name="Pay_method" value="CREDIT" <?php if($payment['Pay_method'] == "CREDIT") { echo "checked";} ?>
+        /><label for="Credit">Credit</label></dd>
+        <dd><input type="radio" id = "Debit" name="Pay_method" value="DEBIT" <?php if($payment['Pay_method'] == "DEBIT") { echo "checked";} ?>
+        /><label for="Debit">Debit</label></dd>
+        <dd><input type="radio" id = "Cheque" name="Pay_method" value="CHEQUE" <?php if($payment['Pay_method'] == "CHEQUE") { echo "checked";} ?>
+        /><label for="Cheque">Cheque</label></dd>
+        <dd><input type="radio" id = "Paypal" name="Pay_method" value="PAYPAL" <?php if($payment['Pay_method'] == "PAYPAL") { echo "checked";} ?>
+        /><label for="PayPal">PayPal</label></dd>
+      </dl>
+      
+      <dl>
+        <dt>Invoice_id</dt>
+        <dd><input type="number" name="Invoice_id" min ="1000000" max = "9999999" value="<?php echo h($payment['Invoice_id']); ?>" /></dd>
       </dl>
 
-      <dl>
-        <dt>Zipcode</dt>
-        <dd><input type="number" name="Zipcode" min="1" max="99999" value="<?php echo h($Zipcode); ?>" /></dd>
-      </dl>
-
-      <dl>
-        <dt>Gender</dt>
-        <dd><input type="radio" id = "Male" name="Gender" value="M" <?php if($Gender == "M") { echo "checked";} ?>
-        /><label for="Male">Male</label></dd>
-        <dd><input type="radio" id = "Female" name="Gender" value="F" <?php if($Gender == "F") { echo "checked";} ?>
-        /><label for="Female">Female</label></dd>
-      </dl>
-
-      <dl>
-      	<dt>Date of Birth</dt>
-      	<dd><input type ="date" name="DOB" value="<?php echo h($DOB); ?>"></dd>
-      </dl>
-
-      <dl>
-        <dt>Marital Status</dt>
-        <dd><input type="radio" id = "Single" name="M_Status" value="S" <?php if($M_Status == "S") { echo "checked";} ?>
-        /><label for="Single">Single</label></dd>
-        <dd><input type="radio" id = "Married" name="M_Status" value="M" <?php if($M_Status == "M") { echo "checked";} ?>
-        /><label for="Married">Married</label></dd>
-        <dd><input type="radio" id = "Widowed" name="M_Status" value="W" <?php if($M_Status == "W") { echo "checked";} ?>
-        /><label for="Widowed">Widowed</label></dd>
-      </dl>
-
-      <dl>
-        <dt>Customer Type</dt>
-        <dd><input type="radio" id = "Automobile" name="C_Type" value="A" <?php if($C_Type == "A") { echo "checked";} ?>
-        /><label for="Automobile">Automobile</label></dd>
-        <dd><input type="radio" id = "Home" name="C_Type" value="H" <?php if($C_Type == "H") { echo "checked";} ?>
-        /><label for="Home">Home</label></dd>
-        <dd><input type="radio" id = "Both" name="C_Type" value="AH" <?php if($C_Type == "AH") { echo "checked";} ?>
-        /><label for="Both">Both</label></dd>
-      </dl>
       <div id="operations">
-        <input type="submit" value="Edit Customer" />
+        <input type="submit" value="Edit Payment" />
       </div>
     </form>
+
   </div>
+
 </div>
 
 <?php include(SHARED_PATH . '/staff_footer.php'); ?>
+
 
 

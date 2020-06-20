@@ -1,4 +1,7 @@
-<?php require_once('../../../private/initialize.php'); ?>
+<?php require_once('../../../private/initialize.php'); 
+
+require_login();
+?>
 
 <?php
   $Vehicle_Driver_set = find_all("vehicle_driver");
@@ -32,9 +35,9 @@
           <td><?php echo $Vehicle_Driver['Vin']; ?></td>
           <td><?php echo $Vehicle_Driver['License_no']; ?></td>
           <td><?php echo $Vehicle_Driver['Rating']; ?></td>
-          <td><a class="action" href="<?php echo url_for('/staff/vehicle_driver/show.php?id=' . h(u($Vehicle_Driver['Vin']))); ?>">View</a></td>
-          <td><a class="action" href="<?php echo url_for('/staff/vehicle_driver/edit.php?id=' . h(u($Vehicle_Driver['Vin']))); ?>">Edit</a></td>
-          <td><a class="action" href="">Delete</a></td>
+          <td><a class="action" href="<?php echo url_for('/staff/vehicle_driver/show.php?id=' . h(u($Vehicle_Driver['Vin'])) . '&id2=' . h(u($Vehicle_Driver['License_no']))); ?>">View</a></td>
+          <td><a class="action" href="<?php echo url_for('/staff/vehicle_driver/edit.php?id=' . h(u($Vehicle_Driver['Vin'])) . '&id2=' . h(u($Vehicle_Driver['License_no']))); ?>">Edit</a></td>
+          <td><a class="action" href="<?php echo url_for('/staff/vehicle_driver/delete.php?id=' . h(u($Vehicle_Driver['Vin'])) . '&id2=' . h(u($Vehicle_Driver['License_no']))); ?>">Delete</a></td>
     	  </tr>
       <?php } ?>
   	</table>

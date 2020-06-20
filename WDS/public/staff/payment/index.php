@@ -1,4 +1,6 @@
-<?php require_once('../../../private/initialize.php'); ?>
+<?php require_once('../../../private/initialize.php'); 
+
+require_login();?>
 
 <?php
 
@@ -33,14 +35,14 @@ $Payment_set = find_all("payment");
 
   	  <?php while($Payment = mysqli_fetch_assoc($Payment_set)) { ?>
         <tr>
-          <td><?php echo $Payment['Instal_ID']; ?></td>
-          <td><?php echo $Payment['Instal_amt']; ?></td>
-          <td><?php echo $Payment['Pay_date']; ?></td>
-          <td><?php echo $Payment['Pay_method']; ?></td>
-          <td><?php echo $Payment['Invoice_id']; ?></td>
+          <td><?php echo h($Payment['Instal_ID']); ?></td>
+          <td><?php echo h($Payment['Instal_amt']); ?></td>
+          <td><?php echo h($Payment['Pay_date']); ?></td>
+          <td><?php echo h($Payment['Pay_method']); ?></td>
+          <td><?php echo h($Payment['Invoice_id']); ?></td>
           <td><a class="action" href="<?php echo url_for('/staff/payment/show.php?id=' . h(u($Payment['Instal_ID']))); ?>">View</a></td>
           <td><a class="action" href="<?php echo url_for('/staff/payment/edit.php?id=' . h(u($Payment['Instal_ID']))); ?>">Edit</a></td>
-          <td><a class="action" href="">Delete</a></td>
+          <td><a class="action" href="<?php echo url_for('/staff/payment/delete.php?id=' . h(u($Payment['Instal_ID']))); ?>">Delete</a></td>
     	  </tr>
       <?php } ?>
   	</table>

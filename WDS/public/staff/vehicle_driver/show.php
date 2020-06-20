@@ -1,9 +1,15 @@
 
-<?php require_once('../../../private/initialize.php'); ?>
+<?php require_once('../../../private/initialize.php'); 
+
+require_login();
+?>
 
 <?php 
   $id = $_GET['id'] ?? '1';
-  $vehicle_driver = find_record("vehicle_driver", "Vin" ,$id);
+  $id2=$_GET['id2'];
+
+  $vehicle_driver = find_vehicle_driver_record($id,$id2);
+
 ?>
 
 <?php $page_title = 'Show vehicle_driver'; ?>
