@@ -24,4 +24,4 @@ Designed and Implemented a web server interface to communicate with the back-end
 5. The customer can then login and check their policy details
 
 #### The Relational Database Model for the Insurance Database
-![alt text](https://github.com/srachana15/Insurance_CMS_php/blob/master/Logical%20Model.png)
+![Relational Model](https://github.com/srachana15/Insurance_CMS_php/blob/master/Logical%20Model.png)
